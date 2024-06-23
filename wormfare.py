@@ -1,10 +1,10 @@
 import requests
 from colorama import Fore, Style
-from datetime import datetime
-import urllib.parse
 import time
 import json
 import random
+import argparse
+
 
 LoginUrl = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/auth/login'
 ProfileUrl = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/user/profile'
@@ -15,45 +15,45 @@ ActiveBooster = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/game/
 BuyBoost = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/game/buy-boost'
 CheckCompletion = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/quest/check-completion'
 claimReward = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/quest/claim-reward'
-minSlap = 250
-maxSlap = 5000
+minSlap = 500
+maxSlap = 7000
 
 ListTask = [
     "_LegendaryLeagueQuest",
-"_MythicLeagueQuest",
-"_JoinSquadQuest",
-"_JoinDiscordQuest",
-"_JoinInstagramQuest",
-"_JoinTikTokQuest",
-"_JoinYoutubeQuest",
-"_EpicLeagueQuest",
-"_JoinTwitterQuest",
-"_WatchWormfareVideoQuest"
+    "_MythicLeagueQuest",
+    "_JoinSquadQuest",
+    "_JoinDiscordQuest",
+    "_JoinInstagramQuest",
+    "_JoinTikTokQuest",
+    "_JoinYoutubeQuest",
+    "_EpicLeagueQuest",
+    "_JoinTwitterQuest",
+    "_WatchWormfareVideoQuest"
 ]
 
 def RandomSlap(minSlap, maxSlap):
     return random.randint(minSlap, maxSlap)
 
 LoginHeaders = {
-  "Accept": "application/json, text/plain, */*",
-  "Accept-Encoding": "gzip, deflate, br, zstd",
-  "Accept-Language": "en-US,en;q=0.9",
-  "Content-Length": "305",
-  "Content-Type": "application/json",
-  "Origin": "https://clicker.wormfare.com",
-  "Priority": "u=1, i",
-  "Referer": "https://clicker.wormfare.com/",
-  "Sec-Ch-Ua": "\"Google Chrome\";v=\"125\", \"Chromium\";v=\"125\", \"Not.A/Brand\";v=\"24\"",
-  "Sec-Ch-Ua-Mobile": "?0",
-  "Sec-Ch-Ua-Platform": "\"Windows\"",
-  "Sec-Fetch-Dest": "empty",
-  "Sec-Fetch-Mode": "cors",
-  "Sec-Fetch-Site": "cross-site",
-  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Content-Length": "305",
+    "Content-Type": "application/json",
+    "Origin": "https://clicker.wormfare.com",
+    "Priority": "u=1, i",
+    "Referer": "https://clicker.wormfare.com/",
+    "Sec-Ch-Ua": "\"Google Chrome\";v=\"125\", \"Chromium\";v=\"125\", \"Not.A/Brand\";v=\"24\"",
+    "Sec-Ch-Ua-Mobile": "?0",
+    "Sec-Ch-Ua-Platform": "\"Windows\"",
+    "Sec-Fetch-Dest": "empty",
+    "Sec-Fetch-Mode": "cors",
+    "Sec-Fetch-Site": "cross-site",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
 }
 
-def get_headers (token):
-    return{
+def get_headers(token):
+    return {
         "Accept": "application/json, text/plain, */*",
         "Accept-Encoding": "gzip, deflate, br, zstd",
         "Accept-Language": "en-US,en;q=0.9",
@@ -69,7 +69,7 @@ def get_headers (token):
         "Sec-Fetch-Site": "cross-site",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
         "X-Api-Key": "9m60AhO1I9JmrYIsWxMnThXbF3nDW4GHFA1rde5PKzJmRA9Dv6LZ2YXSM6vvwigC"
-        }
+    }
 
 def read_init_data(file_path):
     with open(file_path, 'r') as file:
@@ -77,19 +77,18 @@ def read_init_data(file_path):
     return [line.strip() for line in lines]
 
 def complete_tasks_ceo(headers):
-        for task_sub_id in [0, 1]:
-            payload = {"questId": '_Followthe CEO', "taskId": task_sub_id}
-            check_completion = requests.post(CheckCompletion, headers=headers, json=payload)
-            if check_completion.status_code == 200:
-                print(f"{Fore.GREEN}[ Task ] : Task _Followthe CEO checked for completion.")
-                claim_reward = requests.post(claimReward, headers=headers, json=payload)
-                if claim_reward.status_code == 200:
-                    print(f"{Fore.GREEN}[ Task ] : Reward for _Followthe CEO claimed successfully.")
-                else:
-                    print(f"{Fore.RED}[ Task ] : Failed to claim reward for _Followthe CEO.")
+    for task_sub_id in [0, 1]:
+        payload = {"questId": '_Followthe CEO', "taskId": task_sub_id}
+        check_completion = requests.post(CheckCompletion, headers=headers, json=payload)
+        if check_completion.status_code == 200:
+            print(f"{Fore.GREEN}[ Task ] : Task _Followthe CEO checked for completion.")
+            claim_reward = requests.post(claimReward, headers=headers, json=payload)
+            if claim_reward.status_code == 200:
+                print(f"{Fore.GREEN}[ Task ] : Reward for _Followthe CEO claimed successfully.")
             else:
-                print(f"{Fore.RED}[ Task ] : Failed to check completion for _Followthe CEO.")
-
+                print(f"{Fore.RED}[ Task ] : Failed to claim reward for _Followthe CEO.")
+        else:
+            print(f"{Fore.RED}[ Task ] : Failed to check completion for _Followthe CEO.")
 
 def complete_tasks(headers):
     for task_id in ListTask:
@@ -105,18 +104,20 @@ def complete_tasks(headers):
         else:
             print(f"{Fore.RED}[ Task ] : Failed to check completion for {task_id}.")
 
-def get_daily_boost(shop_url,headers):
+def get_daily_boost(shop_url, headers):
     response = requests.get(shop_url, headers=headers)
     response.raise_for_status()
     return response.json().get('dailyBoosts')
 
-
-
-def main():
+def main(max_level):
     auto_tasks = input("Auto claim Task? Y/N: ").strip().upper()
     recharge_slaps = input("Using Recharge Slaps? Y/N: ").strip().upper()
     auto_booster = input("Using Floppy Fish? Y/N: ").strip().upper()
-    # auto_upgrade = input("Upgrade Boosters? Y/N: ").strip().upper()
+    auto_upgrade = input("Upgrade Boosters? Y/N: ").strip().upper()
+
+    if auto_upgrade == 'Y':
+        print(f"Max level untuk upgrade boosters: {max_level}")
+
     query_data_list = read_init_data('initdata.txt')
     akun = 1
     total_accounts = len(query_data_list)
@@ -165,6 +166,46 @@ def main():
                     energyLeft = profile_data.get('energyLeft')
                     slapAmount = RandomSlap(minSlap, maxSlap)
 
+                    if auto_upgrade == 'Y':
+                        shopResponse = requests.get(ShopUrl, headers=profile_headers)
+                        if shopResponse.status_code == 200:
+                            try:
+                                shop_data = shopResponse.json().get('availableBoost')
+                                upgrade = True
+                                while upgrade:
+                                    sorted_shop_data = sorted(shop_data, key=lambda x: x['level'])
+                                    upgrade = False
+
+                                    for booster in sorted_shop_data:
+                                        upgrade_type = booster['type']
+                                        if upgrade_type == 'auto_bot':
+                                            continue
+                                        
+                                        max_level_booster = booster['maxLevel']
+                                        current_level = booster['level']
+
+                                        if current_level < max_level_booster and current_level < max_level:
+                                            buyPayload = {
+                                                "type": upgrade_type
+                                            }
+                                            buyResponse = requests.post(BuyBoost, headers=profile_headers, json=buyPayload)
+                                            if buyResponse.status_code == 200:
+                                                print(f"{Fore.GREEN}[ Upgrade ] : Sukses upgrade {upgrade_type} ke level {current_level + 1}")
+                                                shopResponse = requests.get(ShopUrl, headers=profile_headers)
+                                                shop_data = shopResponse.json().get('availableBoost')
+                                                upgrade = True
+                                                break
+                                            else:
+                                                print(f"{Fore.RED}[ Upgrade ] : Gagal upgrade {upgrade_type} balance rendah")
+                                        else:
+                                            print(f"{Fore.YELLOW}[ Upgrade ] : {upgrade_type} sudah maks level.")
+                                else:
+                                    print(f"{Fore.YELLOW}[ Upgrade ] : Mentok (excluding auto_bot).")
+                            except json.JSONDecodeError as e:
+                                print(f"{Fore.RED}[ ShopData ] : Failed to decode JSON response: {e}")
+                        else:
+                            print(f"{Fore.RED}[ ShopData ] : Gagal mendapatkan data shop: {shopResponse.status_code}")
+                                    
                     if auto_tasks == 'Y':
                         complete_tasks(profile_headers)
                         complete_tasks_ceo(profile_headers)
@@ -244,4 +285,8 @@ def main():
                         
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description='Wormfare Game Script')
+    parser.add_argument('--max_level', type=int, default=10, help='Max level for booster upgrades (default: 10)')
+    args = parser.parse_args()
+
+    main(args.max_level)
