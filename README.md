@@ -21,5 +21,12 @@ Install with python
 
 Contact : (https://t.me/n_bayhaqi)
 
+## Feature
+
+Auto Upgrade Booster
+Auto Recharge Energy
+Auto Booster
+Auto Task
+
 ## Screenshot
 ![App Screenshot](https://i.ibb.co.com/72tQvWb/222.jpg)
