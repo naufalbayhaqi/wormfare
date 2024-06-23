@@ -166,6 +166,10 @@ def main(max_level):
                     energyLeft = profile_data.get('energyLeft')
                     slapAmount = RandomSlap(minSlap, maxSlap)
 
+                    if auto_tasks == 'Y':
+                        complete_tasks(profile_headers)
+                        complete_tasks_ceo(profile_headers)
+                        
                     if auto_upgrade == 'Y':
                         shopResponse = requests.get(ShopUrl, headers=profile_headers)
                         if shopResponse.status_code == 200:
@@ -206,9 +210,6 @@ def main(max_level):
                         else:
                             print(f"{Fore.RED}[ ShopData ] : Gagal mendapatkan data shop: {shopResponse.status_code}")
                                     
-                    if auto_tasks == 'Y':
-                        complete_tasks(profile_headers)
-                        complete_tasks_ceo(profile_headers)
 
                     if auto_booster == 'Y' and turbo > 0:
                         turbo_payload = {
