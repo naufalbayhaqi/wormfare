@@ -110,14 +110,13 @@ def get_daily_boost(shop_url,headers):
     response.raise_for_status()
     return response.json().get('dailyBoosts')
 
-# def nyalainBoost():
 
 
 def main():
     auto_tasks = input("Auto claim Task? Y/N: ").strip().upper()
     recharge_slaps = input("Using Recharge Slaps? Y/N: ").strip().upper()
     auto_booster = input("Using Floppy Fish? Y/N: ").strip().upper()
-    auto_upgrade = input("Upgrade Boosters? Y/N: ").strip().upper()
+    # auto_upgrade = input("Upgrade Boosters? Y/N: ").strip().upper()
     query_data_list = read_init_data('initdata.txt')
     akun = 1
     total_accounts = len(query_data_list)
