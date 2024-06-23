@@ -27,6 +27,7 @@ Contact : (https://t.me/n_bayhaqi)
   2. Auto Recharge Energy
   3. Auto Booster
   4. Auto Task
+  5. Multi Account
 
 ## Screenshot
 ![App Screenshot](https://i.ibb.co.com/72tQvWb/222.jpg)
