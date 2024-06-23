@@ -5,7 +5,6 @@ import json
 import random
 import argparse
 
-
 LoginUrl = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/auth/login'
 ProfileUrl = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/user/profile'
 QuestUrl = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/quest'
@@ -116,6 +115,13 @@ def main(max_level):
     auto_upgrade = input("Upgrade Boosters? Y/N: ").strip().upper()
 
     if auto_upgrade == 'Y':
+        # Ask user to input max level for boosters if auto_upgrade is 'Y'
+        max_level_input = input("How many max level do you want for booster upgrades? (default is 10): ").strip()
+        if max_level_input:
+            try:
+                max_level = int(max_level_input)
+            except ValueError:
+                print("Invalid input. Defaulting to max level 10.")
         print(f"Max level untuk upgrade boosters: {max_level}")
 
     query_data_list = read_init_data('initdata.txt')
