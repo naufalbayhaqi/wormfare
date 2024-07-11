@@ -5,15 +5,15 @@ import json
 import random
 import argparse
 
-LoginUrl = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/auth/login'
-ProfileUrl = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/user/profile'
-QuestUrl = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/quest'
-SaveClicks = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/game/save-clicks'
-ShopUrl = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/game/shop'
-ActiveBooster = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/game/activate-daily-boost'
-BuyBoost = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/game/buy-boost'
-CheckCompletion = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/quest/check-completion'
-claimReward = 'https://elcevb3oz4.execute-api.eu-central-1.amazonaws.com/quest/claim-reward'
+LoginUrl = 'https://api.clicker.wormfare.com/auth/login'
+ProfileUrl = 'https://api.clicker.wormfare.com/user/profile'
+QuestUrl = 'https://api.clicker.wormfare.com/quest'
+SaveClicks = 'https://api.clicker.wormfare.com/game/save-clicks'
+ShopUrl = 'https://api.clicker.wormfare.com/game/shop'
+ActiveBooster = 'https://api.clicker.wormfare.com/game/activate-daily-boost'
+BuyBoost = 'https://api.clicker.wormfare.com/game/buy-boost'
+CheckCompletion = 'https://api.clicker.wormfare.com/quest/check-completion'
+claimReward = 'https://api.clicker.wormfare.com/quest/claim-reward'
 minSlap = 500
 maxSlap = 7000
 
@@ -37,9 +37,10 @@ LoginHeaders = {
     "Accept": "application/json, text/plain, */*",
     "Accept-Encoding": "gzip, deflate, br, zstd",
     "Accept-Language": "en-US,en;q=0.9",
-    "Content-Length": "305",
+    "Content-Length": "341",
     "Content-Type": "application/json",
     "Origin": "https://clicker.wormfare.com",
+    "Pragma": "no-cache",
     "Priority": "u=1, i",
     "Referer": "https://clicker.wormfare.com/",
     "Sec-Ch-Ua": "\"Google Chrome\";v=\"125\", \"Chromium\";v=\"125\", \"Not.A/Brand\";v=\"24\"",
@@ -47,7 +48,7 @@ LoginHeaders = {
     "Sec-Ch-Ua-Platform": "\"Windows\"",
     "Sec-Fetch-Dest": "empty",
     "Sec-Fetch-Mode": "cors",
-    "Sec-Fetch-Site": "cross-site",
+    "Sec-Fetch-Site": "same-site",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
 }
 
@@ -58,6 +59,7 @@ def get_headers(token):
         "Accept-Language": "en-US,en;q=0.9",
         "Authorization": f'Bearer {token}',
         "Origin": "https://clicker.wormfare.com",
+        "Pragma": "no-cache",
         "Priority": "u=1, i",
         "Referer": "https://clicker.wormfare.com/",
         "Sec-Ch-Ua": "\"Google Chrome\";v=\"125\", \"Chromium\";v=\"125\", \"Not.A/Brand\";v=\"24\"",
@@ -65,7 +67,7 @@ def get_headers(token):
         "Sec-Ch-Ua-Platform": "\"Windows\"",
         "Sec-Fetch-Dest": "empty",
         "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "cross-site",
+        "Sec-Fetch-Site": "same-site",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
         "X-Api-Key": "9m60AhO1I9JmrYIsWxMnThXbF3nDW4GHFA1rde5PKzJmRA9Dv6LZ2YXSM6vvwigC"
     }
@@ -79,10 +81,10 @@ def complete_tasks_ceo(headers):
     for task_sub_id in [0, 1]:
         payload = {"questId": '_Followthe CEO', "taskId": task_sub_id}
         check_completion = requests.post(CheckCompletion, headers=headers, json=payload)
-        if check_completion.status_code == 200:
+        if check_completion.status_code == 200 or check_completion.status_code == 201:
             print(f"{Fore.GREEN}[ Task ] : Task _Followthe CEO checked for completion.")
             claim_reward = requests.post(claimReward, headers=headers, json=payload)
-            if claim_reward.status_code == 200:
+            if claim_reward.status_code == 200 or claim_reward.status_code == 201:
                 print(f"{Fore.GREEN}[ Task ] : Reward for _Followthe CEO claimed successfully.")
             else:
                 print(f"{Fore.RED}[ Task ] : Failed to claim reward for _Followthe CEO.")
@@ -93,10 +95,10 @@ def complete_tasks(headers):
     for task_id in ListTask:
         payload = {"questId": task_id}
         check_completion = requests.post(CheckCompletion, headers=headers, json=payload)
-        if check_completion.status_code == 200:
+        if check_completion.status_code == 200 or check_completion.status_code == 201:
             print(f"{Fore.GREEN}[ Task ] : Task {task_id} checked for completion.")
             claim_reward = requests.post(claimReward, headers=headers, json=payload)
-            if claim_reward.status_code == 200:
+            if claim_reward.status_code == 200 or claim_reward.status_code == 201:
                 print(f"{Fore.GREEN}[ Task ] : Reward for {task_id} claimed successfully.")
             else:
                 print(f"{Fore.RED}[ Task ] : Failed to claim reward for {task_id}.")
@@ -133,15 +135,14 @@ def main(max_level):
         for query_data in query_data_list:
             print(f"\n\n{Fore.CYAN+Style.BRIGHT}==============Akun {akun}=================\n")
             akun += 1
-            server_time_difference = int(24000)
             current_timestamp_seconds = time.time()
-            adjusted_timestamp = int(current_timestamp_seconds * 1000) - server_time_difference
+            adjusted_timestamp = int(current_timestamp_seconds * 1000)
             data = json.dumps({"initData": query_data})
             energyLeft = 0
 
             response = requests.post(LoginUrl, headers=LoginHeaders, data=data)
             
-            if response.status_code == 200:
+            if response.status_code == 201:
                 response_data = response.json()
                 token = response_data.get('accessToken')
                 if token:
@@ -156,7 +157,7 @@ def main(max_level):
                         resetPayload = {
                             "amount" : 1,
                             "isTurbo" : False,
-                            "startTimeStamp" : adjusted_timestamp
+                            "startTimestamp" : adjusted_timestamp
                         }
                         resetEnergy = requests.post(SaveClicks, headers=profile_headers, json=resetPayload)
                         profile_response = requests.get(ProfileUrl, headers=profile_headers)
@@ -178,7 +179,7 @@ def main(max_level):
                         
                     if auto_upgrade == 'Y':
                         shopResponse = requests.get(ShopUrl, headers=profile_headers)
-                        if shopResponse.status_code == 200:
+                        if shopResponse.status_code == 200 or shopResponse.status_code == 201:
                             try:
                                 shop_data = shopResponse.json().get('availableBoost')
                                 upgrade = True
@@ -199,7 +200,7 @@ def main(max_level):
                                                 "type": upgrade_type
                                             }
                                             buyResponse = requests.post(BuyBoost, headers=profile_headers, json=buyPayload)
-                                            if buyResponse.status_code == 200:
+                                            if buyResponse.status_code == 200 or buyResponse.status_code == 201:
                                                 print(f"{Fore.GREEN}[ Upgrade ] : Sukses upgrade {upgrade_type} ke level {current_level + 1}")
                                                 shopResponse = requests.get(ShopUrl, headers=profile_headers)
                                                 shop_data = shopResponse.json().get('availableBoost')
@@ -222,7 +223,7 @@ def main(max_level):
                             "type": "turbo"
                         }
                         responseBooster = requests.post(ActiveBooster, headers=profile_headers, json=turbo_payload)
-                        if responseBooster.status_code != 200:
+                        if responseBooster.status_code != 201:
                             print(f"{Fore.RED}[ Booster ] : Gagal mengaktifkan turbo!")
                         else:
                             print(f"{Fore.GREEN}[ Booster ] : Sukses mengaktifkan turbo!")
@@ -231,21 +232,22 @@ def main(max_level):
                         slapPayload = {
                             "amount" : slapAmount,
                             "isTurbo" : False,
-                            "startTimeStamp" : adjusted_timestamp
+                            "startTimestamp" : adjusted_timestamp
                         }
                         slapPayloadTurbo = {
                             "amount" : slapAmount,
                             "isTurbo" : True,
-                            "startTimeStamp" : adjusted_timestamp
+                            "startTimestamp" : adjusted_timestamp
                         }
                         turboTrue = requests.get(ProfileUrl, headers=profile_headers)
                         turboTrue = turboTrue.json().get('isTurboAvailable')
+
 
                         if turboTrue:
                             slapResponse = requests.post(SaveClicks, headers=profile_headers, json=slapPayloadTurbo)
                         else:
                             slapResponse = requests.post(SaveClicks, headers=profile_headers, json=slapPayload)
-                        if slapResponse.status_code == 200:
+                        if slapResponse.status_code == 201 or slapResponse.status_code == 200:
                             print(f"{Fore.GREEN}[ Slap ] : Sukses Slap")
                         else:
                             print(f"{Fore.RED}[ Slap ] : Gagal Slap")
@@ -255,7 +257,7 @@ def main(max_level):
                                     "type" : "full_energy"
                                 }
                             responseRechargeSlaps = requests.post(ActiveBooster, headers=profile_headers, json=rechargePayload)
-                            if responseRechargeSlaps.status_code == 200:
+                            if responseRechargeSlaps.status_code == 201:
                                 print(f"\r{Fore.GREEN+Style.BRIGHT}[ Booster ] : Berhasil recharge slaps!", flush=True)
                             else:
                                 print(f"\r{Fore.RED+Style.BRIGHT}[ Booster ] : Gagal recharge slaps!", flush=True)
@@ -270,7 +272,7 @@ def main(max_level):
                             resetPayload = {
                                 "amount" : 1,
                                 "isTurbo" : False,
-                                "startTimeStamp" : adjusted_timestamp
+                                "startTimestamp" : adjusted_timestamp
                             }
                             resetEnergy = requests.post(SaveClicks, headers=profile_headers, json=resetPayload)
                             profile_response = requests.get(ProfileUrl, headers=profile_headers)
@@ -279,6 +281,7 @@ def main(max_level):
                     print(f"{Fore.RED}[ Token ] : Gagal mendapatkan Token!")
             else:
                 print(f"{Fore.RED}[ Token ] : Gagal Login!")
+                print(response.json())
         
         
         print(f"\n\n{Fore.CYAN+Style.BRIGHT}==============Semua akun telah diproses=================\n")
