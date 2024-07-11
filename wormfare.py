@@ -157,7 +157,7 @@ def main(max_level):
                         resetPayload = {
                             "amount" : 1,
                             "isTurbo" : False,
-                            "startTimestamp" : adjusted_timestamp
+                            "startTimestamp" : int(time.time() * 1000)
                         }
                         resetEnergy = requests.post(SaveClicks, headers=profile_headers, json=resetPayload)
                         profile_response = requests.get(ProfileUrl, headers=profile_headers)
@@ -232,12 +232,12 @@ def main(max_level):
                         slapPayload = {
                             "amount" : slapAmount,
                             "isTurbo" : False,
-                            "startTimestamp" : adjusted_timestamp
+                            "startTimestamp" : int(time.time() * 1000)
                         }
                         slapPayloadTurbo = {
                             "amount" : slapAmount,
                             "isTurbo" : True,
-                            "startTimestamp" : adjusted_timestamp
+                            "startTimestamp" : int(time.time() * 1000)
                         }
                         turboTrue = requests.get(ProfileUrl, headers=profile_headers)
                         turboTrue = turboTrue.json().get('isTurboAvailable')
@@ -272,7 +272,7 @@ def main(max_level):
                             resetPayload = {
                                 "amount" : 1,
                                 "isTurbo" : False,
-                                "startTimestamp" : adjusted_timestamp
+                                "startTimestamp" : int(time.time() * 1000)
                             }
                             resetEnergy = requests.post(SaveClicks, headers=profile_headers, json=resetPayload)
                             profile_response = requests.get(ProfileUrl, headers=profile_headers)
